@@ -11,6 +11,7 @@
                  [org.clojure/clojure "1.10.3"]
                  [org.clojure/spec.alpha "0.3.218"]
                  [org.xerial/sqlite-jdbc "3.34.0"]
+                 [duct/migrator.ragtime "0.3.2"]
                  [rum "0.12.9"]]
   :plugins [[duct/lein-duct "0.12.3"]
             [lein-cloverage "1.2.2"]

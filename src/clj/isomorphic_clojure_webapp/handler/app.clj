@@ -12,3 +12,13 @@
                          [:body
                           [:#app]
                           [:script {:src "/js/main.js"}]]])}))
+
+(defmethod ig/init-key ::add [_ _]
+  (fn [req]
+    (prn req)
+    {:status 200
+     :headers {"content-type" "text/html"}
+     :body (render-html [:html
+                         [:body
+                          [:#app]
+                          [:script {:src "/js/main.js"}]]])}))
