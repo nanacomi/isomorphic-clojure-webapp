@@ -3,9 +3,22 @@
 
   :duct.router/reitit
   {:routes [["/" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/index}]
-            ["/app/*" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/index}]]}
+            ["/app/*" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/index}]
+            ["/tasks" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/all}]
+            ["/task" {:post #ig/ref :isomorphic-clojure-webapp.handler.app/add}
+             ["/:id" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/fetch}]]
+            ]}
 
-  :isomorphic-clojure-webapp.handler.app/index {}}
+  :isomorphic-clojure-webapp.handler.app/index {}
+  :isomorphic-clojure-webapp.handler.app/all {:db #ig/ref :duct.database.sql/hikaricp}
+  :isomorphic-clojure-webapp.handler.app/add {:db #ig/ref :duct.database.sql/hikaricp}
+  :isomorphic-clojure-webapp.handler.app/fetch {:db #ig/ref :duct.database.sql/hikaricp}
+
+  :duct.migrator/ragtime {:migrations [#ig/ref :your.first.migration/create-task-table]}
+
+  [:duct.migrator.ragtime/sql :your.first.migration/create-task-table]
+  {:up ["create table tasks (id integer primary key autoincrement, label varcahr(128) not null);"]
+   :down ["drop table tasks;"]}}
 
  :duct.profile/dev   #duct/include "dev"
  :duct.profile/local #duct/include "local"
@@ -16,4 +29,5 @@
  :duct.module.web/api
  {}
  :duct.module/sql
- {}}
+ {}
+ } 
