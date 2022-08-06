@@ -4,15 +4,18 @@
   :duct.router/reitit
   {:routes [["/" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/index}]
             ["/app/*" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/index}]
-            ["/tasks" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/all}]
-            ["/task" {:post #ig/ref :isomorphic-clojure-webapp.handler.app/add}
-             ["/:id" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/fetch}]]
-            ]}
+            ["/tasks" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/all
+                       :post #ig/ref :isomorphic-clojure-webapp.handler.app/add}]
+            ["/task/:id" {:get #ig/ref :isomorphic-clojure-webapp.handler.app/fetch
+                          :put #ig/ref :isomorphic-clojure-webapp.handler.app/update
+                          :delete #ig/ref :isomorphic-clojure-webapp.handler.app/delete}]]}
 
   :isomorphic-clojure-webapp.handler.app/index {}
   :isomorphic-clojure-webapp.handler.app/all {:db #ig/ref :duct.database.sql/hikaricp}
   :isomorphic-clojure-webapp.handler.app/add {:db #ig/ref :duct.database.sql/hikaricp}
   :isomorphic-clojure-webapp.handler.app/fetch {:db #ig/ref :duct.database.sql/hikaricp}
+  :isomorphic-clojure-webapp.handler.app/update {:db #ig/ref :duct.database.sql/hikaricp}
+  :isomorphic-clojure-webapp.handler.app/delete {:db #ig/ref :duct.database.sql/hikaricp}
 
   :duct.migrator/ragtime {:migrations [#ig/ref :your.first.migration/create-task-table]}
 
