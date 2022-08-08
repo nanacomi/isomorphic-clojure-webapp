@@ -1,10 +1,13 @@
 (ns isomorphic-clojure-webapp.handler.app
-  (:require [integrant.core :as ig]
+  (:require [clojure.walk :refer [keywordize-keys]]
+            [integrant.core :as ig]
             [rum.core :refer [render-html]]
             [next.jdbc :as jdbc]
             [honeysql.format :as sql]))
 
-(def db-spec (fn [db] (:datasource (:spec db))))
+(defn db-spec
+  [db]
+  (:datasource (:spec db)))
 
 (defmethod ig/init-key ::index [_ _]
   (fn [req]
@@ -25,15 +28,14 @@
 
 (defmethod ig/init-key ::fetch [_ {:keys [db]}]
   (fn [req]
-    (let [tasks (jdbc/execute! (db-spec db) [(format "select * from tasks where id = %s" (get-in req [:path-params :id]))])] 
+    (let [tasks (jdbc/execute! (db-spec db) ["select * from tasks where id = ?" (get-in req [:path-params :id])])] 
       {:status 200
        :headers {"content-type" "application/json"}
        :body (first tasks)})))
 
 (defmethod ig/init-key ::add [_ {:keys [db]}]
   (fn [req]
-    (let [new-label (get (clojure.walk/keywordize-keys (get req :body-params)) :label)]
-      ;; (jdbc/execute! (db-spec db) [(format "insert into tasks(\"label\") values(\"%s\")" new-label)])
+    (let [new-label (-> req :body-params keywordize-keys :label)]
       (jdbc/execute! (db-spec db) (sql/format {:insert-into :tasks,
                                                :columns [:label],
                                                :values [[new-label]]}))
@@ -44,7 +46,7 @@
 (defmethod ig/init-key ::update [_ {:keys [db]}]
   (fn [req]
     (let [id (get-in req [:path-params :id])
-          label (get (clojure.walk/keywordize-keys (get req :body-params)) :label)]
+          label (:label (keywordize-keys (get req :body-params)))]
       (jdbc/execute! (db-spec db) (sql/format {:update :tasks,
                                                :set {:label label},
                                                :where [:= :id id]}))
