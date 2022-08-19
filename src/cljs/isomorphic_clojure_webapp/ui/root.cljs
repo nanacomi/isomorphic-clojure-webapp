@@ -9,7 +9,7 @@
 (def ^:private routing
   [["/" {:name  :start
          :title "スタートアップ"
-         :view  start/ui}]
+         :view  start/ui}] 
    ["/*" {:name :not-found
           :title "見つかりませんでした"
           :view errors/not-found}]])
