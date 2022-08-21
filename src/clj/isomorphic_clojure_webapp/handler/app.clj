@@ -40,8 +40,7 @@
                                                :columns [:label],
                                                :values [[new-label]]}))
       {:status 200
-       :headers {"content-type" "application/json"}
-       :body "ok"})))
+       :headers {"content-type" "application/json"}})))
 
 (defmethod ig/init-key ::update [_ {:keys [db]}]
   (fn [req]
