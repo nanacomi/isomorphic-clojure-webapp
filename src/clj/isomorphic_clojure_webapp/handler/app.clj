@@ -59,5 +59,4 @@
       (jdbc/execute! (db-spec db) (sql/format {:delete-from :tasks
                                                :where [:= :id id]}))
       {:status 200
-       :headers {"content-type" "application/json"}
-       :body "ok"})))
+       :headers {"content-type" "application/json"}})))
