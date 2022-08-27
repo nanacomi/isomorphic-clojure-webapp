@@ -50,8 +50,7 @@
                                                :set {:label label},
                                                :where [:= :id id]}))
       {:status 200
-       :headers {"content-type" "application/json"}
-       :body "ok"})))
+       :headers {"content-type" "application/json"}})))
 
 (defmethod ig/init-key ::delete [_ {:keys [db]}]
   (fn [req]
